@@ -4,37 +4,27 @@ $font-family: "Open Sans", Arial, sans-serif;
 $light: 300;
 $normal: 400;
 $bold: 700;
-// $font-size-small: 12px;
+$font-size-small: 12px;
 $font-size: 14px;
 $font-size-bigger: 16px;
 $font-size-big: 18px;
-// $font-size-medium: 20px;
+$font-size-medium: 20px;
 $font-size-title: 24px;
-// $font-size-biggest: 30px;
-// $font-size-super-big: 40px;
-// $font-size-giant: 50px;
 
 ///colors///
 
-$main-color: #321c5a;
-$second-color: #ea3267;
+$main-color: #000;
 
-$font-main-color: #1e1d1e;
-$font-second-color: #f4f2f6;
-$font-third-color: #553bb0;
-
-$bg-main: #fff;
-$bg-second: #eaecf1;
-$bg-third: #f2f2f2;
-
-$grey-light: #f2f2f2;
-$grey: #e5e5e5;
+$font-main-color: #000;
 
 ///screen///
-
-$screen-sm: 320px;
-$screen-md: 660px;
-$screen-lg: 960px;
+$screen-xxs:                  320px;
+$screen-xs:                   480px;
+$screen-sm:                   768px;
+$screen-md:                   992px;
+$screen-lg:                   1200px;
+$screen-xl:                   1920px;
 
 
 $retina: (min-resolution: 144dpi), (min-resolution: 1.5dppx);
+
