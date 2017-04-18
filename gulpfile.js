@@ -36,7 +36,12 @@ gulp.task('sass', function(){
     .pipe(sourcemaps.init())                                // инициируем карту кода
     .pipe(sass())                                           // компилируем
     .pipe(postcss([                                         // делаем постпроцессинг
-        autoprefixer({ browsers: ['last 2 version'] }),     // автопрефиксирование
+        autoprefixer({ browsers: [
+          'last 2 version',
+          'last 7 Chrome versions',
+          'last 10 Opera versions',
+          'last 7 Firefox versions'
+        ]}),                                                // автопрефиксирование
         mqpacker({ sort: true }),                           // объединение медиавыражений
     ]))
     .pipe(sourcemaps.write('/'))                            // записываем карту кода как отдельный файл (путь из константы)
@@ -54,6 +59,7 @@ gulp.task('html', function() {
     .pipe(replace(/\n\s*<!--DEV[\s\S]+?-->/gm, ''))         // убираем комментарии <!--DEV ... -->
     .pipe(gulp.dest(dirs.build));                           // записываем файлы (путь из константы)
 });
+
 
 // ЗАДАЧА: Копирование изображений
 gulp.task('img', function () {
@@ -84,7 +90,7 @@ gulp.task('img:opt', function () {
 
 // ЗАДАЧА: Сборка SVG-спрайта
 gulp.task('svgstore', function (callback) {
-  let spritePath = dirs.source + '/img/svg-sprite';          // переменнач с путем к исходникам SVG-спрайта
+  var spritePath = dirs.source + '/img/svg-sprite';          // переменнач с путем к исходникам SVG-спрайта
   if(fileExist(spritePath) !== false) {
     return gulp.src(spritePath + '/*.svg')                   // берем только SVG файлы из этой папки, подпапки игнорируем
       // .pipe(plumber({ errorHandler: onError }))
@@ -121,23 +127,36 @@ gulp.task('clean', function () {
 // ЗАДАЧА: Конкатенация и углификация Javascript
 gulp.task('js', function () {
   return gulp.src([
-      // список обрабатываемых файлов в нужной последовательности
-      dirs.source + '/js/script.js',
+      // список обрабатываемых файлов в нужной последовательности (Запятая после каждого файла, в конце запятая не нужна)
+      dirs.source + '/js/script.js'
     ])
     .pipe(plumber({ errorHandler: onError }))
     .pipe(concat('script.js'))
+    .pipe(gulp.dest(dirs.build + '/js'))
+    .pipe(rename('script-min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest(dirs.build + '/js'));
+    .pipe(gulp.dest(dirs.build + '/js'))
+    .pipe(browserSync.stream());
 });
 
 // ЗАДАЧА: Перемещение шрифтов
 gulp.task('copy', function() {
-  return gulp.src([
-      dirs.source + '/fonts/**/*.{woff,woff2}'
-    ], {
-      base: '.'
-    })
-    .pipe(gulp.dest('build'));
+  return gulp.src(dirs.source + '/fonts/**/*.{woff,woff2}')
+    .pipe(gulp.dest('build' + '/fonts'));
+});
+
+// ЗАДАЧА: сборка полифиллов
+// gulp.task('copy-js', function() {
+//   return gulp.src([
+//     // список обрабатываемых файлов в нужной последовательности (Запятая после каждого файла, в конце запятая не нужна)
+//     ])
+//     .pipe(gulp.dest('build' + '/js'));
+// });
+
+// ЗАДАЧА: сборка сss-библиотек
+gulp.task('copy-css', function() {
+  return gulp.src(dirs.source + '/css/blueimp-gallery.min.css')
+    .pipe(gulp.dest('build' + '/css'));
 });
 
 // ЗАДАЧА: Сборка всего
